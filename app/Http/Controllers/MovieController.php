@@ -26,30 +26,15 @@ class MovieController extends Controller
     // Создание нового фильма
     public function store(StoreMovieRequest $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:200',
-            'duration' => 'required|integer',
-            'release_year' => 'required|integer|digits:4',
-            'genre' => 'required|string|max:100',
-            'director' => 'required|string|max:150',
-        ]);
-
-        return Movie::create($validatedData);
+        return Movie::create($request->validated());
     }
 
     // Обновление информации о фильме
     public function update(UpdateMovieRequest $request, $id)
     {
         $movie = Movie::findOrFail($id);
-        $validatedData = $request->validate([
-            'title' => 'string|max:200',
-            'duration' => 'integer',
-            'release_year' => 'integer|digits:4',
-            'genre' => 'string|max:100',
-            'director' => 'string|max:150',
-        ]);
 
-        $movie->update($validatedData);
+        $movie->update($request->validated());
         return $movie;
     }
 
