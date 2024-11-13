@@ -17,11 +17,11 @@ class MovieFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence(3),
-            'duration' => $this->faker->numberBetween(60, 180),
-            'release_year' => $this->faker->year(),
-            'genre' => $this->faker->word(),
-            'director' => $this->faker->name(),
+            'title' => fake()->sentence(3),
+            'duration' => fake()->numberBetween(60, 180),
+            'release_year' => fake()->year(),
+            'genre' => fake()->word(),
+            'director' => fake()->name(),
         ];
     }
 }
