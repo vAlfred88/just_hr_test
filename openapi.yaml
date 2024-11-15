@@ -3,10 +3,6 @@ info:
   title: Movie Catalog API
   description: API для управления каталогом фильмов
   version: 1.0.0
-  contact:
-    name: API Support
-    url: http://example.com/support
-    email: support@example.com
 
 servers:
   - url: http://localhost/api
@@ -16,16 +12,14 @@ paths:
   /movies:
     get:
       summary: Получить список всех фильмов
-      description: Возвращает массив фильмов
+      description: Возвращает массив фильмов с пагинацией
       responses:
         '200':
           description: Список фильмов
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Movie'
+                $ref: '#/components/schemas/PaginatedMovieListResponse'
 
     post:
       summary: Создать новый фильм
@@ -42,7 +36,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Movie'
+                $ref: '#/components/schemas/MovieResponse'
         '422':
           description: Ошибка валидации
           content:
@@ -67,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Movie'
+                $ref: '#/components/schemas/MovieResponse'
         '404':
           description: Фильм не найден
           content:
@@ -97,7 +91,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Movie'
+                $ref: '#/components/schemas/MovieResponse'
         '404':
           description: Фильм не найден
           content:
@@ -140,30 +134,48 @@ components:
       properties:
         id:
           type: integer
-          example: 1
+          example: 99
         title:
           type: string
-          example: "Inception"
+          example: "Dolore eligendi omnis blanditiis molestiae."
         duration:
           type: integer
-          example: 148
+          example: 84
         release_year:
           type: integer
-          example: 2010
+          example: 1976
         genre:
           type: string
-          example: "Sci-Fi"
+          example: "qui"
         director:
           type: string
-          example: "Christopher Nolan"
+          example: "Freeman Schowalter"
         created_at:
           type: string
           format: date-time
-          example: "2024-11-12T14:00:00Z"
+          example: "2024-11-15T07:16:41.000000Z"
         updated_at:
           type: string
           format: date-time
-          example: "2024-11-12T14:00:00Z"
+          example: "2024-11-15T07:16:41.000000Z"
+
+    MovieResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Movie'
+
+    PaginatedMovieListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Movie'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
 
     MovieInput:
       type: object
@@ -189,6 +201,64 @@ components:
         - release_year
         - genre
         - director
+
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type: string
+          example: "http://localhost/api/movies?page=1"
+        last:
+          type: string
+          example: "http://localhost/api/movies?page=1000"
+        prev:
+          type: string
+          nullable: true
+          example: null
+        next:
+          type: string
+          nullable: true
+          example: "http://localhost/api/movies?page=2"
+
+    PaginationMeta:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          example: 1
+        from:
+          type: integer
+          example: 1
+        last_page:
+          type: integer
+          example: 1000
+        links:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                nullable: true
+                example: "http://localhost/api/movies?page=2"
+              label:
+                type: string
+                example: "2"
+              active:
+                type: boolean
+                example: false
+        path:
+          type: string
+          example: "http://localhost/api/movies"
+        per_page:
+          type: integer
+          example: 1
+        to:
+          type: integer
+          example: 1
+        total:
+          type: integer
+          example: 1000
 
     ErrorResponse:
       type: object
