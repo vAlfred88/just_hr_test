@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: Movie Catalog API
+  description: API для управления каталогом фильмов
+  version: 1.0.0
+  contact:
+    name: API Support
+    url: http://example.com/support
+    email: support@example.com
+
+servers:
+  - url: http://localhost/api
+    description: Локальный сервер
+
+paths:
+  /movies:
+    get:
+      summary: Получить список всех фильмов
+      description: Возвращает массив фильмов
+      responses:
+        '200':
+          description: Список фильмов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'
+
+    post:
+      summary: Создать новый фильм
+      description: Создает новый фильм в базе данных
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieInput'
+      responses:
+        '201':
+          description: Фильм успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '422':
+          description: Ошибка валидации
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /movies/{id}:
+    get:
+      summary: Получить фильм по ID
+      description: Возвращает фильм по его ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID фильма
+      responses:
+        '200':
+          description: Информация о фильме
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Фильм не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    patch:
+      summary: Обновить информацию о фильме
+      description: Обновляет информацию о существующем фильме
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID фильма
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieInput'
+      responses:
+        '200':
+          description: Фильм успешно обновлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Фильм не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Удалить фильм
+      description: Удаляет фильм по его ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID фильма
+      responses:
+        '200':
+          description: Фильм успешно удален
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Movie deleted successfully"
+        '404':
+          description: Фильм не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Inception"
+        duration:
+          type: integer
+          example: 148
+        release_year:
+          type: integer
+          example: 2010
+        genre:
+          type: string
+          example: "Sci-Fi"
+        director:
+          type: string
+          example: "Christopher Nolan"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-11-12T14:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-11-12T14:00:00Z"
+
+    MovieInput:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Inception"
+        duration:
+          type: integer
+          example: 148
+        release_year:
+          type: integer
+          example: 2010
+        genre:
+          type: string
+          example: "Sci-Fi"
+        director:
+          type: string
+          example: "Christopher Nolan"
+      required:
+        - title
+        - duration
+        - release_year
+        - genre
+        - director
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Resource not found"
