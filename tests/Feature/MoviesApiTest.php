@@ -72,11 +72,42 @@ class MoviesApiTest extends TestCase
         $response = $this->getJson('/api/movies');
 
         $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'title',
+                        'duration',
+                        'release_year',
+                        'genre',
+                        'director',
+                        'created_at',
+                        'updated_at',
+                    ]
+                ],
+                'links' => [
+                    'first',
+                    'last',
+                    'prev',
+                    'next',
+                ],
+                'meta' => [
+                    'current_page',
+                    'from',
+                    'last_page',
+                    'links',
+                    'path',
+                    'per_page',
+                    'to',
+                    'total',
+                ]
+            ])
             ->assertJson(fn(AssertableJson $json) => $json->has('data', 3)
                 ->has('data.0', fn(AssertableJson $json) => $json->where('id', $movies->first()->id)
                     ->where('title', $movies->first()->title)
                     ->etc()
                 )
+                ->etc()
             );
     }
 
