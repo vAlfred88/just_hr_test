@@ -54,6 +54,13 @@ docker-compose up -d --build
 docker-compose exec app php artisan migrate
 ```
 
+### 5. Наполнение тестовыми данными
+После запуска миграции выполните команду для заполнения таблицы movies тестовыми данными:
+
+```bash
+docker-compose exec app php artisan db:seed
+```
+
 ## Использование
 После запуска контейнеров и выполнения миграций API будет доступен по адресу http://localhost.
 
