@@ -23,7 +23,7 @@ class UpdateMovieRequest extends FormRequest
     {
         return [
             'title' => 'string|max:200',
-            'duration' => 'integer',
+            'duration' => 'integer|gt:0',
             'release_year' => 'integer|digits:4',
             'genre' => 'string|max:100',
             'director' => 'string|max:150',

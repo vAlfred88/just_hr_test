@@ -23,7 +23,7 @@ class StoreMovieRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:200',
-            'duration' => 'required|integer',
+            'duration' => 'required|integer|gt:0',
             'release_year' => 'required|integer|digits:4',
             'genre' => 'required|string|max:100',
             'director' => 'required|string|max:150',
