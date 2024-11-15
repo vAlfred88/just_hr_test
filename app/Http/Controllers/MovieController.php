@@ -13,7 +13,7 @@ class MovieController extends Controller
 {
     public function index(): MovieCollection
     {
-        return new MovieCollection(Movie::query()->paginate(1));
+        return new MovieCollection(Movie::query()->paginate(20));
     }
 
     public function show(Movie $movie): MovieResource
